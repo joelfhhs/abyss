@@ -67,6 +67,13 @@ public class Shader {
     }
 
     /**
+     * Binds the shader.
+     */
+    public void bind() {
+        glUseProgram(program);
+    }
+
+    /**
      * Gets the shaders program identifier.
      * @return shader program
      */

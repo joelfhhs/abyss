@@ -73,3 +73,9 @@ shadowJar {
     archiveClassifier.set("")
     archiveVersion.set(version)
 }
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.joelmachens.abyss.Main'
+    }
+}

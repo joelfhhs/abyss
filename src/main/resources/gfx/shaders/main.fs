@@ -1,10 +1,12 @@
 #version 410 core
 
-in vec4 colour;
-
 out vec4 pixel;
+
+in vec2 texture_coordinates;
+
+uniform sampler2D image;
 
 void main()
 {
-    pixel = colour;
+    pixel = texture(image, texture_coordinates);
 } 
