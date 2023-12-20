@@ -1,6 +1,8 @@
 package com.joelmachens.abyss.gfx;
 
 import com.joelmachens.abyss.GameState;
+import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.glfw.GLFWFramebufferSizeCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 
@@ -23,26 +25,23 @@ public class Window {
         assert mode != null;
 
         // window hints
-        glfwWindowHint(GLFW_RED_BITS, mode.redBits());
-        glfwWindowHint(GLFW_GREEN_BITS, mode.greenBits());
-        glfwWindowHint(GLFW_BLUE_BITS, mode.blueBits());
-        glfwWindowHint(GLFW_REFRESH_RATE, mode.refreshRate());
-        glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
-
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 
         // borderless full screen stuff
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-        glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
-        glfwWindowHint(GLFW_AUTO_ICONIFY, GLFW_FALSE);
+        glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
+        if (glfwGetPlatform() != GLFW_PLATFORM_COCOA) {
+            glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+            glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+            glfwWindowHint(GLFW_AUTO_ICONIFY, GLFW_FALSE);
+        }
 
         // TODO: make multisampling a setting
         glfwWindowHint(GLFW_SAMPLES, 4);
 
-        this.window = glfwCreateWindow(mode.width(), mode.height(), "Abyss", monitor, 0);
+        this.window = glfwCreateWindow(mode.width(), mode.height(), "Abyss", 0, 0);
         glfwMakeContextCurrent(this.window);
         GL.createCapabilities();
         glfwSwapInterval(1);
@@ -50,17 +49,23 @@ public class Window {
         glEnable(GL_MULTISAMPLE);
 
         Shader main = new Shader("main");
-        glUseProgram(main.getProgram());
+        Texture texture = new Texture("null");
 
         int VAO = glGenVertexArrays();
         glBindVertexArray(VAO);
+
+        main.bind();
+        glActiveTexture(GL_TEXTURE0);
+        texture.bind();
 
         int VBO = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
         glBufferData(GL_ARRAY_BUFFER, GameState.triangle, GL_STATIC_DRAW);
 
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 3 * GameState.FLOAT_SIZE, 0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, false, 5 * GameState.FLOAT_SIZE, 0);
         glEnableVertexAttribArray(0);
+        glVertexAttribPointer(1, 2, GL_FLOAT, false, 5 * GameState.FLOAT_SIZE, 3 * GameState.FLOAT_SIZE);
+        glEnableVertexAttribArray(1);
     }
 
     /**

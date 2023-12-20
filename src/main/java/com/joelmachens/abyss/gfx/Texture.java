@@ -24,7 +24,7 @@ public class Texture {
      * @param resource name of the texture resource
      */
     public Texture(String resource) {
-        byte[] image = Resource.loadBinary(resource);
+        byte[] image = Resource.loadBinary("gfx/textures/" + resource + ".png");
 
         if (image.length == 0) {
             Logger.error("Texture " + resource + " has an invalid asset!");
@@ -38,13 +38,20 @@ public class Texture {
         ByteBuffer buffer = je_malloc(image.length);
         assert buffer != null;
         buffer.put(image);
+        buffer.flip();
 
         try (MemoryStack stack = MemoryStack.stackPush()) {
             IntBuffer width = stack.mallocInt(1);
             IntBuffer height = stack.mallocInt(1);
             IntBuffer channels = stack.mallocInt(1);
 
+            stbi_set_flip_vertically_on_load(true);
             ByteBuffer texture = stbi_load_from_memory(buffer, width, height, channels, 4);
+            stbi_set_flip_vertically_on_load(false);
+            if (texture == null) {
+                Logger.error("Texture " + resource + " loading failed! " + stbi_failure_reason());
+                throw new RuntimeException("Could not load textures.");
+            }
 
             this.width = width.get(0);
             this.height = height.get(0);
@@ -57,11 +64,21 @@ public class Texture {
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, this.width, this.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture);
             glGenerateMipmap(GL_TEXTURE_2D);
 
-            if (texture != null) {
-                stbi_image_free(texture);
-            }
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+
+            stbi_image_free(texture);
         }
         je_free(buffer);
+    }
+
+    /**
+     * Binds the texture.
+     */
+    public void bind() {
+        glBindTexture(GL_TEXTURE_2D, reference);
     }
 
     /**

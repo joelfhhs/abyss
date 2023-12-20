@@ -6,8 +6,9 @@ package com.joelmachens.abyss;
 public class GameState {
     public static final int FLOAT_SIZE = 4;
     public static final float[] triangle = new float[] {
-            -1.0f, -1.0f, 0.0f,
-            1.0f, -1.0f, 0.0f,
-            0.0f, 1.0f, 0.0f
+            // vertices         texture coordinates
+            -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+            1.0f, -1.0f, 0.0f,  1.0f, 0.0f,
+            0.0f, 1.0f, 0.0f,   0.5f, 1.0f
     };
 }
