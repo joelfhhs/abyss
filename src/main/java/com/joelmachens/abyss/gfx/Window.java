@@ -1,8 +1,6 @@
 package com.joelmachens.abyss.gfx;
 
 import com.joelmachens.abyss.GameState;
-import org.lwjgl.glfw.GLFWErrorCallback;
-import org.lwjgl.glfw.GLFWFramebufferSizeCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 
@@ -33,9 +31,7 @@ public class Window {
         // borderless full screen stuff
         glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
         if (glfwGetPlatform() != GLFW_PLATFORM_COCOA) {
-            glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
             glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
-            glfwWindowHint(GLFW_AUTO_ICONIFY, GLFW_FALSE);
         }
 
         // TODO: make multisampling a setting
@@ -49,7 +45,7 @@ public class Window {
         glEnable(GL_MULTISAMPLE);
 
         Shader main = new Shader("main");
-        Texture texture = new Texture("null");
+        Texture texture = new Texture("atlas");
 
         int VAO = glGenVertexArrays();
         glBindVertexArray(VAO);
@@ -60,12 +56,14 @@ public class Window {
 
         int VBO = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER, GameState.triangle, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, GameState.quad, GL_STATIC_DRAW);
 
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 5 * GameState.FLOAT_SIZE, 0);
+        glVertexAttribPointer(0, 2, GL_FLOAT, false, 5 * GameState.FLOAT_SIZE, 0);
         glEnableVertexAttribArray(0);
-        glVertexAttribPointer(1, 2, GL_FLOAT, false, 5 * GameState.FLOAT_SIZE, 3 * GameState.FLOAT_SIZE);
+        glVertexAttribPointer(1, 2, GL_FLOAT, false, 5 * GameState.FLOAT_SIZE, 2 * GameState.FLOAT_SIZE);
         glEnableVertexAttribArray(1);
+        glVertexAttribPointer(2, 1, GL_FLOAT, false, 5 * GameState.FLOAT_SIZE, 4 * GameState.FLOAT_SIZE);
+        glEnableVertexAttribArray(2);
     }
 
     /**
@@ -73,7 +71,7 @@ public class Window {
      */
     public void render() {
         glClear(GL_COLOR_BUFFER_BIT);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
         glfwSwapBuffers(window);
     }
 

@@ -1,0 +1,14 @@
+TODOs
+DONE 1. Texture Atlas, KISS
+2. Batch Rendering, generate a single vertex buffer per frame with screen space quads + texcoords to save draw calls.
+
+Game Design Ideas:
+retro / horror (dark & grimy) visual style, pixel art & 8bit audio
+player is in a randomly generated (wave collapse?) set of caves and needs to get out.
+resource gathering - exploration of different underground areas, fighting, automation - steampunky resource gathering
+finding sources of light <- can't see well without
+background story elements
+player skills, level up as they do more. specialisation of skills -- mutually exclusive craftables that unlock skills?
+multiple ways to get out (automation - technology victory OR fighting - beat a "final boss" in the deepest dungeon)
+paranoia or insanity mechanic - slowly start hallucinating, losing it etc if you don't sleep / eat / stay healthy, can result in a game over if you ignore it
+game is "ironman" - three save slots, no save scumming, you die = game over

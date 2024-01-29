@@ -9,4 +9,4 @@ uniform sampler2D image;
 void main()
 {
     pixel = texture(image, texture_coordinates);
-} 
+}

@@ -5,10 +5,14 @@ package com.joelmachens.abyss;
  */
 public class GameState {
     public static final int FLOAT_SIZE = 4;
-    public static final float[] triangle = new float[] {
-            // vertices         texture coordinates
-            -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
-            1.0f, -1.0f, 0.0f,  1.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,   0.5f, 1.0f
+    public static final float[] quad = new float[] {
+            // vertices         texture coordinates     texture index
+            -1.0f, -1.0f,       0.0f, 0.0f,             (float) Math.floor(Math.random() * 4),
+            -1.0f, 1.0f,        0.0f, 1.0f,             (float) Math.floor(Math.random() * 4),
+            1.0f, 1.0f,         1.0f, 1.0f,             (float) Math.floor(Math.random() * 4),
+
+            -1.0f, -1.0f,       0.0f, 0.0f,             (float) Math.floor(Math.random() * 4),
+            1.0f, -1.0f,        1.0f, 0.0f,             (float) Math.floor(Math.random() * 4),
+            1.0f, 1.0f,         1.0f, 1.0f,             (float) Math.floor(Math.random() * 4),
     };
 }
