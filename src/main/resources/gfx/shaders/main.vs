@@ -8,10 +8,11 @@ out vec2 texture_coordinates;
 
 vec2 texture_coordinates_from_index(vec2 base, float i)
 {
-    float row = i / 128.0f;
-    float column = 1.0f; // TODO: FIXME for > 128 textures
 
-    return vec2(row + (base.x * (1.0f/128.0f)), column - (base.y * (1.0f/128.0f)));
+    float row = 1.0f - ((1.0f/128.0f) * floor(i / 128.0f));
+    float column = (1.0f / 128.0f) * float(int(i) % 128);
+
+    return vec2(column + (base.x * (1.0f / 128.0f)), row - (base.y * (1.0f / 128.0f)));
 }
 
 void main()
